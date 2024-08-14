@@ -1,5 +1,6 @@
 FROM ollama/ollama:0.2.7
 
+RUN apt-get update
 RUN apt-get install -y curl
 
 COPY ./ollama-elyza /root/ollama-elyza
