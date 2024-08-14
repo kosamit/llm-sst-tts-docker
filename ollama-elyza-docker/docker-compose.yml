@@ -1,0 +1,15 @@
+services:
+  ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_ORIGINS="*"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]

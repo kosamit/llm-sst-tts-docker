@@ -1,0 +1,47 @@
+services:
+  ollama:
+    build:
+      context: ollama-elyza-docker
+      dockerfile: Dockerfile.gpu
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_ORIGINS="*"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+  whisper:
+    build:
+      context: whisper.cpp-docker
+      dockerfile: Dockerfile.gpu
+    container_name: whisper
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+  style-bert-vits2:
+    build:
+      context: sbv2-docker
+      dockerfile: Dockerfile.gpu
+    container_name: style-bert-vits2-app
+    volumes:
+      - ./model_assets:/app/model_assets
+    ports:
+      - "8000:7860"
+      - "5000:5000"
+      - "6006:6006"
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    command: python server_fastapi.py
